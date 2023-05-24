@@ -62,7 +62,7 @@ This repository is developed in response to the Corteva Code Challenge. The prim
 
 
 ## API Server
-### The API server provides three API endpoints. All endpoints return pages containing maximum 50 records.
+- The API server provides three API endpoints. All endpoints return pages containing maximum 50 records.
 1. The first one allows the user to query weather data in a paginated manner. The path is `/api/weather`. The query parameters for the GET API call are `date`, `station` and `page`. `date` is expected in "YYYYMMDD" format. `page` is the requested page number. If a page number beyond the total number of pages for the query is requested the response contains no records. The response also returns the total number of pages for the query. None of the query paramters are required.
 2. The path for the second one is `/api/weather/stats`. This API allows querying weather statistics. The query parameters for the GET API call are `year`, `station` and `page`. The "year" and "station" params specify the query and "page" specifies the requested page.
 3. The third API at `/api/swagger` serves the Swagger documentation page. You can experiment with the API directly from that page.
