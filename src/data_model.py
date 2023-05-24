@@ -24,6 +24,15 @@ class WeatherData(Base):
 
     __table_args__ = (UniqueConstraint('station', 'date', name='__station_date'),)
 
+    def to_dict(self):
+        return {
+            "station":self.station,
+            "date":str(self.date),
+            "max_temperature":self.max_temperature,
+            "min_temperature":self.min_temperature,
+            "precipitation": self.precipitation
+        }
+
 # Data model declaration for weather statistics
 class WeatherStats(Base):
 
@@ -41,3 +50,12 @@ class WeatherStats(Base):
     updated_at = Column(DateTime, server_default=func.now())
 
     __table_args__ = (UniqueConstraint('station', 'year', name='__station_year'),)
+
+    def to_dict(self):
+        return {
+            "station":self.station,
+            "year": self.year,
+            "avg_max_temperature":self.avg_max_temperature,
+            "avg_min_temperature":self.avg_min_temperature,
+            "total_precipiation":self.total_precipitation,
+        }

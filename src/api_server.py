@@ -19,7 +19,6 @@ s = session()
 
 app = Flask("API Server")
 api = Api(app)
-CORS(app)
 
 def paginate(q, page=1, records_per_page=RECORDS_PER_PAGE):
     result = {}
@@ -32,7 +31,7 @@ def paginate(q, page=1, records_per_page=RECORDS_PER_PAGE):
     return result
 
 
-def query_and_paginate(request, database_model, response):
+def query_and_paginate(request, database_model, filter, response):
 
     page = int(request.args.get("page", 1))
     q = s.query(database_model).filter_by(**filter)
@@ -57,7 +56,7 @@ def weather():
         filter["station"] = request.args["station"]
     
 
-    query_and_paginate(request, WeatherData, response)
+    query_and_paginate(request, WeatherData, filter, response)
 
     return response
 
@@ -70,14 +69,14 @@ def weather_stats():
     if "station" in request.args:
         filter["station"] = request.args["station"]
 
-    query_and_paginate(request, WeatherStats, response)
+    query_and_paginate(request, WeatherStats, filter, response)
     
 
     return response
 
 
 SWAGGER_URL = '/swagger'
-API_URL = 'http://127.0.0.1:5000/swagger.json'
+API_URL = 'http://localhost:8000/swagger.json'
 swaggerui_blueprint = get_swaggerui_blueprint(
     SWAGGER_URL,
     API_URL,
@@ -94,4 +93,8 @@ def swagger():
 
 
 def start_server():
-    app.run()
+    CORS(app)
+    app.run(host="0.0.0.0", port=8000)
+
+if __name__ == "__main__":
+    start_server()

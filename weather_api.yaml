@@ -16,7 +16,7 @@ info:
     email: svaidya1695@gmail.com
   version: "1"
 servers:
-  - url: http://localhost:5000/api/
+  - url: http://localhost:8000/api/
 tags:
   - name: weather
     description: Query weather data and stats

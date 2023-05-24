@@ -52,7 +52,9 @@ def ingest_data(s):
         # For each file in the given folder
         for i, each_file in enumerate(files):
 
-            print(f"{each_file} {i+1} of {len(files)}")
+            print(f"Processing {each_file} ({i+1} of {len(files)})...", end='')
+            file_ts = time()
+            file_records = 0
             data = load_data('wx_data', each_file)
 
             # Extracting station from filename.
@@ -80,6 +82,8 @@ def ingest_data(s):
                 # Add all the records
                 s.add(weather_data) 
                 inserted_records += 1
+                file_records += 1
+            print(f"done in {time() - file_ts:.2f}s. Inserted {file_records} records.")
 
         # Commiting the records
         s.commit()
