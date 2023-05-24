@@ -13,11 +13,7 @@ from sqlalchemy.orm import sessionmaker
 import os
 
 
-path=  os.getcwd()
-weather_files_path = 'wx_data' #path + '/wx_data'
-print(weather_files_path)
-files= os.listdir('wx_data')
-print(files)
+
 
 
 # This function loads the data for given file, using genfromtxt() functio of numpy. 
@@ -41,27 +37,21 @@ def validate_row(tuple_row):
 
 
 # This function is to ingest data to SQLite.
-def ingest_data():
+def ingest_data(s):
 
     t = time()
 
-    # Initialise SQLite engine for given session
-    engine = create_engine('sqlite:///csv_test.db')
-    Base.metadata.create_all(engine)
+    files= os.listdir('wx_data')
 
-    # Create the session
-    session = sessionmaker()
-    session.configure(bind=engine)
-    s = session()
-
+    print(f"Starting data ingestion: {datetime.now()}")
+    inserted_records = 0
     # Inserting data
+    
     try:
 
-        analyze(s)
         # For each file in the given folder
         for i, each_file in enumerate(files):
-            if i >= 0:
-                break
+
             print(f"{each_file} {i+1} of {len(files)}")
             data = load_data('wx_data', each_file)
 
@@ -89,6 +79,7 @@ def ingest_data():
                                         )
                 # Add all the records
                 s.add(weather_data) 
+                inserted_records += 1
 
         # Commiting the records
         s.commit()
@@ -102,13 +93,8 @@ def ingest_data():
         # Close the connection
         s.close()
 
-    print ("Time elapsed: " + str(time() - t) + " s.") #0.091s
+    print ("Time elapsed: " + str(time() - t) + "s.") #0.091s
+    print(f"Data ingestion completed at {datetime.now()}. Inserted {inserted_records} records")
 
 
 
-
-
-
-if __name__ == "__main__":
-
-    ingest_data()

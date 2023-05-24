@@ -27,7 +27,7 @@ def analyze(s):
         )
         # Checking for updates
         if s.query(exists().where(WeatherStats.station==weather_data.station, WeatherStats.year==weather_data.year)).scalar():
-            existing_weather_data: WeatherStats = WeatherStats.query.filter_by(station=weather_data.station, year=weather_data.year).first()
+            existing_weather_data: WeatherStats = s.query(WeatherStats).filter_by(station=weather_data.station, year=weather_data.year).first()
             existing_weather_data.avg_max_temperature = weather_data.avg_max_temperature
             existing_weather_data.avg_min_temperature = weather_data.avg_min_temperature
             existing_weather_data.total_precipitation = weather_data.total_precipitation

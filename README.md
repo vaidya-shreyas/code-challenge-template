@@ -68,6 +68,4 @@ Following process can be implemented to deploy given pipeline on AWS.
 
 ## End Notes
 
-Feel free to discuss your experiences on the [discussion page](https://github.com/vaidya-shreyas/Code-Challenge-Template/discussions).
-
 [Back to Top](#Code-Challenge-Template)

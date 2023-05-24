@@ -1,0 +1,162 @@
+openapi: 3.0.3
+info:
+  title: Weather data and stats API
+  description: |-
+    The following APIs will provide station, date, maximum temperature, minimum temperature and precipitation details for a particular weather station from Nebraska, Iowa, Illinois, Indiana, or Ohio. 
+    
+    There are 2 get APIs endpoints:
+    - /api/weather
+    - /api/weather/stats
+    
+    /api/weather endpoint provides details of weather for a given date or given station.
+    
+    /api/weather/stats endpoint provides details of average maximum temperature, average minimum temperature and total precipitation for a given year and station 
+
+  contact:
+    email: svaidya1695@gmail.com
+  version: "1"
+servers:
+  - url: http://localhost:5000/api/
+tags:
+  - name: weather
+    description: Query weather data and stats
+paths:
+  /weather:
+    get:
+      tags:
+        - weather
+      summary: Query weather data by date and station 
+      operationId: getWeather
+      parameters:
+        - name: date
+          in: query
+          required: false
+          schema:
+            type: string
+            pattern: '\d\d\d\d\d\d\d'
+          description: Date in YYYYMMDD format
+        - name: station
+          in: query
+          required: false
+          schema:
+            type: string
+          description: Station name
+        - name: page
+          in: query
+          required: false
+          schema:
+            type: integer
+          description: Page to be returned from results, if number is beyond total pages the response won't contain any records
+      responses:
+        '200':
+          description: Successful query
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WeatherData'          
+        '400':
+          description: Bad request
+        '500':
+          description: Internal failure
+  /weather/stats:
+    get:
+      tags:
+        - weather
+      summary: Query weather stats by date and station 
+      operationId: getWeatherStats
+      parameters:
+        - name: year
+          in: query
+          required: false
+          schema:
+            type: string
+            pattern: '\d\d\d\d'
+          description: Year to query stats for
+        - name: station
+          in: query
+          required: false
+          schema:
+            type: string
+          description: Station name
+        - name: page
+          in: query
+          required: false
+          schema:
+            type: integer
+          description: Page to be returned from results, if number is beyond total pages the response won't contain any records
+      responses:
+        '200':
+          description: Successful query
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WeatherStat'          
+        '400':
+          description: Bad request
+        '500':
+          description: Internal failure
+components:
+  schemas:
+    WeatherData:
+      type: object
+      properties:
+        pages:
+          type: integer
+          format: int64
+          example: 10
+        records:
+          type: array
+          items: 
+            $ref: '#/components/schemas/WeatherDataNested'
+    WeatherDataNested: 
+      type: object
+      properties:
+        station:
+          type: string
+          example: "USC00115901"
+        date:
+          type: string
+          example: "1985-01-01"
+        max_temperature:
+          type: number
+          format: float
+          example: "-111.0"
+        min_temperature:
+          type: number
+          format: float
+          example: "-283.0"
+        precipation:
+          type: number
+          format: float
+          example: "279.0"
+    WeatherStat:
+      type: object
+      properties:
+        pages:
+          type: integer
+          format: int64
+          example: 10
+        records:
+          type: array
+          items: 
+            $ref: '#/components/schemas/WeatherStatNested'
+    WeatherStatNested: 
+      type: object
+      properties:
+        avg_max_temperature:
+          type: number
+          format: float
+          example: "14.2"
+        avg_min_temperature:
+          type: number
+          format: float
+          example: "0.1"
+        total_precipiation:
+          type: number
+          format: float
+          example: "94.7"
+        year:
+          type: number
+          format: integer
+          example: 2014
+    
