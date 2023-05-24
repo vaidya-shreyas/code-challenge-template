@@ -1,1 +1,2 @@
-# Code Challenge Template
+# Code-Challenge-Template
+

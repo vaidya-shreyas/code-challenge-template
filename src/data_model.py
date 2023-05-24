@@ -6,7 +6,7 @@ from sqlalchemy import Column, Integer, Float, Date, DateTime, func, UniqueConst
 
 Base = declarative_base()
 
-
+# Data model declaration for weather data
 class WeatherData(Base):
 
     __tablename__ = "WeatherData"
@@ -24,7 +24,7 @@ class WeatherData(Base):
 
     __table_args__ = (UniqueConstraint('station', 'date', name='__station_date'),)
 
-
+# Data model declaration for weather statistics
 class WeatherStats(Base):
 
     __tablename__ = "WeatherStats"
